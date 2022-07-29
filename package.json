@@ -1,0 +1,28 @@
+{
+  "name": "cli-weather-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "weather.js",
+  "bin": {
+    "weather": "weather.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sashaklimenok/cli-weather-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sashaklimenok/cli-weather-app/issues"
+  },
+  "homepage": "https://github.com/sashaklimenok/cli-weather-app#readme",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "dedent-js": "^1.0.1"
+  }
+}
