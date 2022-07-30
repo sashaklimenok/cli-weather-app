@@ -11,6 +11,10 @@ class Weather {
   }
 
   async saveToken(token) {
+    if (!token.length) {
+      this.log.error("token is required!");
+      return;
+    }
     try {
       await this.storage.saveKeyValue("token", token);
       this.log.success("The token has been saved");

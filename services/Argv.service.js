@@ -17,7 +17,6 @@ export class Argv {
         }
       }
     });
-    console.log(res);
     return res;
   }
 }
