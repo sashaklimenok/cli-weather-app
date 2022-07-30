@@ -2,9 +2,9 @@
   "name": "cli-weather-app",
   "version": "1.0.0",
   "description": "",
-  "main": "weather.js",
+  "main": "./src/weather.js",
   "bin": {
-    "weather": "weather.js"
+    "weather": "./src/weather.js"
   },
   "type": "module",
   "scripts": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sashaklimenok/cli-weather-app#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "chalk": "^5.0.1",
     "dedent-js": "^1.0.1"
   }
