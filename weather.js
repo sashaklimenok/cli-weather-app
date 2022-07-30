@@ -1,22 +1,39 @@
 #!/usr/bin/env node
 
-import { Argv } from "./services/Argv.service.js"
-import { Log } from './services/Log.service.js'
+import { Argv, Storage, Log } from "./services/index.js";
 
 class Weather {
-  constructor({ argv, log }) {
+  constructor({ argv, log, storage }) {
     this.argv = argv;
-    this.log = log
-    this.init()
+    this.log = log;
+    this.storage = storage;
+    this.init();
+  }
+
+  async saveToken(token) {
+    try {
+      await this.storage.saveKeyValue("token", token);
+      this.log.success("The token has been saved");
+    } catch (error) {
+      this.log.error(e.message);
+    }
   }
 
   init() {
-    this.argv.getArgs();
-    this.log.help()
+    const args = this.argv.getArgs();
+    if (args.h) {
+      this.log.help();
+    }
+    if (args.s) {
+    }
+    if (args.t) {
+      this.saveToken(args.t);
+    }
   }
 }
 
 new Weather({
   argv: new Argv(),
-  log: new Log()
-})
+  log: new Log(),
+  storage: new Storage(),
+});

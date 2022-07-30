@@ -7,7 +7,7 @@ export class Log {
   }
 
   success(message) {
-    console.log(chalk.bgCyan(" SUCCESS ") + " " + message);
+    console.log(chalk.bgGreen(" SUCCESS ") + " " + message);
   }
 
   info(message) {
