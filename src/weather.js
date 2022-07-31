@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-import { Argv, Storage, Log, Api } from "./services/index.js";
+import { Argv, Storage, Log, Api, ExceptionFilter } from "./services/index.js";
 import { CLI_KEYS } from "./constants/global.js";
 
 class Weather {
-  constructor({ argv, log, storage, api }) {
+  constructor({ argv, log, storage, api, exceptionFilter }) {
     this.argv = argv;
     this.log = log;
     this.storage = storage;
     this.api = api;
+    this.exceptionFilter = exceptionFilter;
   }
 
   async saveToken(token) {
@@ -30,8 +31,12 @@ class Weather {
       this.log.help();
     }
     if (args.s) {
-      const data = await this.api.getWeather(args.s);
-      console.log(data)
+      try {
+        const data = await this.api.getWeather(args.s);
+        console.log(data);
+      } catch (error) {
+        this.exceptionFilter.handleApiError(error.response.status);
+      }
     }
     if (args.t) {
       this.saveToken(args.t);
@@ -40,12 +45,14 @@ class Weather {
 }
 
 const storage = new Storage();
+const log = new Log();
 
 const app = new Weather({
-  argv: new Argv(),
-  log: new Log(),
   storage,
+  log,
+  argv: new Argv(),
   api: new Api(storage),
+  exceptionFilter: new ExceptionFilter(log),
 });
 
 app.run();
