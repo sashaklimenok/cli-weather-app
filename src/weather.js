@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import chalk from "chalk";
+import dedent from "dedent-js";
 
 import { Argv, Storage, Log, Api, ExceptionFilter } from "./services/index.js";
 import { CLI_KEYS } from "./constants/global.js";
@@ -12,16 +14,39 @@ class Weather {
     this.exceptionFilter = exceptionFilter;
   }
 
-  async saveToken(token) {
-    if (!token.length) {
-      this.log.error("token is required!");
+  async saveParams(key, value) {
+    if (!value.length) {
+      this.log.error(`${key} is required!`);
       return;
     }
     try {
-      await this.storage.saveKeyValue(CLI_KEYS.token, token);
-      this.log.success("The token has been saved");
+      await this.storage.saveKeyValue(key, value);
+      this.log.success(`The ${key} has been saved`);
     } catch (error) {
       this.log.error(e.message);
+    }
+  }
+
+  printForecast(res) {
+    console.log(
+      dedent(`
+      ${chalk.cyan(`The weather in ${res.name.toUpperCase()}`)} 
+      ${res.weather[0].description} ${this.api.getIcon(res.weather[0].icon)}
+      Temperature: ${chalk.cyan(`${res.main.temp} (feels like ${res.main.feels_like})`)}
+      Humidity: ${chalk.cyan(`${res.main.humidity} %`)}
+      Wind Speed: ${chalk.cyan(`${res.wind.speed}`)}
+      `)
+    );
+  }
+
+  async getForecast() {
+    try {
+      const data = await this.api.getWeather();
+      this.printForecast(data)
+    } catch (error) {
+      this.exceptionFilter.handleApiError(
+        error?.response?.status ?? error.message
+      );
     }
   }
 
@@ -29,18 +54,18 @@ class Weather {
     const args = this.argv.getArgs();
     if (args.h) {
       this.log.help();
+      return;
     }
     if (args.s) {
-      try {
-        const data = await this.api.getWeather(args.s);
-        console.log(data);
-      } catch (error) {
-        this.exceptionFilter.handleApiError(error.response.status);
-      }
+      this.saveParams(CLI_KEYS.city, args.s);
+      return;
     }
     if (args.t) {
-      this.saveToken(args.t);
+      this.saveParams(CLI_KEYS.token, args.t);
+      return;
     }
+
+    this.getForecast();
   }
 }
 

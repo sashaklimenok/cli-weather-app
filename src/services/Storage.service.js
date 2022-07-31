@@ -30,6 +30,10 @@ export class Storage {
       this.data = JSON.parse(file);
     }
     this.data[key] = value;
-    await promises.writeFile(this.filePath, JSON.stringify(this.data));
+    try {
+      await promises.writeFile(this.filePath, JSON.stringify(this.data));
+    } catch (error) {
+      console.error(error.message)
+    }
   }
 }

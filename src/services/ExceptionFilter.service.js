@@ -15,7 +15,7 @@ export class ExceptionFilter {
         this.log.error("The city is not defined");
         break;
       default:
-        this.log.error("something went wrong ...");
+        this.log.error(status);
         break;
     }
   }
