@@ -1,5 +1,5 @@
 {
-  "name": "cli-weather-app",
+  "name": "cli-weather-app-course",
   "version": "1.0.0",
   "description": "",
   "main": "./src/weather.js",
@@ -8,6 +8,7 @@
   },
   "type": "module",
   "scripts": {
+    "start": "node ./src/weather.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
